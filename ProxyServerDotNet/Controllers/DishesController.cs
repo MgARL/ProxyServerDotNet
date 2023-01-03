@@ -7,7 +7,7 @@ namespace ProxyServerDotNet.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Dishes : ControllerBase
+    public class DishesController : ControllerBase
     {
         /// <summary>
         /// Signs In User
@@ -19,6 +19,7 @@ namespace ProxyServerDotNet.Controllers
         {
             if (input != null)
             {
+
                 Ok("ff");
             }
         }
@@ -30,8 +31,8 @@ namespace ProxyServerDotNet.Controllers
         {
             var myRes = new MyContent
             {
-                Message = "Response Successfull",
-                Result = "Success"
+                Result = Environment.GetEnvironmentVariable("MY_SECRET"),
+                Message = "Response Successfull"
             };
             return Ok(myRes);
         }
