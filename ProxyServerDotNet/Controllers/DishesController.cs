@@ -1,7 +1,5 @@
-﻿using FireSharp;
-using FireSharp.Config;
-using FireSharp.Interfaces;
-using FireSharp.Response;
+﻿using FireSharp.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProxyServerDotNet.Manager;
 using ProxyServerDotNet.Managers;
@@ -22,29 +20,37 @@ namespace ProxyServerDotNet.Controllers
         /// <param name="input"></param>
         [HttpPost]
         [Route("auth")]
-        public void LogIn([FromBody] AuthInput input)
+        public async Task<IActionResult> LogIn([FromBody] AuthInput input)
         {
-            if (input != null)
+            try
             {
+                var authProvider = FireBaseAuthManager.initialConfig();
+                var userCredential = await authProvider.SignInWithEmailAndPasswordAsync(input.Email, input.Password);
 
-                Ok("ff");
+                if (userCredential != null)
+                {
+
+                    return Ok(userCredential);
+                }
+                return BadRequest("Wrong Credentials");
+
+            }
+            catch (Exception err)
+            {
+                
+               return BadRequest(err.Message);
             }
         }
 
         /// <summary>
-        /// Signs Out User
+        /// reset password
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [Route("auth")]
-        public IActionResult LogOut()
+        [HttpPost]
+        [Route("auth/reset")]
+        public IActionResult ResetPassword()
         {
-            var myRes = new MyContent
-            {
-                Result = Environment.GetEnvironmentVariable("MY_SECRET"),
-                Message = "Response Successfull"
-            };
-            return Ok(myRes);
+            return Ok();
         }
 
         /// <summary>
@@ -81,8 +87,11 @@ namespace ProxyServerDotNet.Controllers
             try
             {
                 var dishes = await DishesManger.GenerateFiveRandomDishes();
-
-                return Ok(dishes);
+                if (dishes.Any())
+                {
+                    return Ok(dishes);
+                }
+                return BadRequest("No Dishes Found");
             }
             catch (Exception err)
             {
@@ -95,6 +104,7 @@ namespace ProxyServerDotNet.Controllers
         /// </summary>
         /// <param name="newDish"></param>
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddNewDish([FromBody] Dish newDish)
         {
             try
@@ -109,17 +119,38 @@ namespace ProxyServerDotNet.Controllers
             }
         }
 
-        // PUT api/<dishes>/5
-        //[HttpPut("{id}")]
-        //public void UpdateDish(int id, [FromBody] string value)
-        //{
-        //}
+        /// <summary>
+        /// Updates dish with Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedDish"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateDish(int id, [FromBody] Dish updatedDish)
+        {
+            try
+            {
+                var res = await DishesManger.UpdateDish(id, updatedDish);
+                if (res != null)
+                {
+                    return Ok(res.StatusCode);
+                }
+                return BadRequest("No Record Updated");
+            }
+            catch (Exception err)
+            {
+
+                return BadRequest(err);
+            }
+        }
 
         /// <summary>
         /// Deletes specific dish form DB
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeletDish(int id)
         {
             try
