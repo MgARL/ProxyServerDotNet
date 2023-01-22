@@ -1,4 +1,5 @@
-﻿using FireSharp;
+﻿
+using FireSharp;
 using FireSharp.Config;
 using FireSharp.Interfaces;
 using ProxyServerDotNet.Models;

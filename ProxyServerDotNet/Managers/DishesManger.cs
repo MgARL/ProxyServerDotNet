@@ -39,5 +39,13 @@ namespace ProxyServerDotNet.Managers
 
             return await client.SetAsync("dishesList", allDishes); ;
         }
+
+        static async public Task<FirebaseResponse> UpdateDish(int id, Dish updatedDish)
+        {
+            var client = FireBaseManager.initialConfig();
+
+            var res = await client.UpdateAsync($"dishesList/{id}", updatedDish);
+            return res;
+        }
     }
 }
