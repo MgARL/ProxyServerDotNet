@@ -3,6 +3,7 @@ using FirebaseAdmin;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using ProxyServerDotNet.Authentication;
+using ProxyServerDotNet.Managers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 DotNetEnv.Env.Load();
+//Create Json File
+var jsonFormatter = new JSONFormatter();
+jsonFormatter.GenerateFirebaseConfigJsonFile();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
