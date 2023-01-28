@@ -6,6 +6,9 @@
 # DotEnv
 *.env
 
+#Firebase config
+firebase-config.json
+
 # User-specific files
 *.rsuser
 *.suo
