@@ -165,24 +165,5 @@ namespace ProxyServerDotNet.Controllers
                 return BadRequest(err);
             }
         }
-
-        [HttpGet("json")]
-        public IActionResult ReadJsonFIle()
-        {
-            try
-            {
-                var jsonFormatter = new JSONFormatter();
-                string filePath = @".\firebase-config.json";
-                var jsonFile = jsonFormatter.ReadJsonFile(filePath);
-
-                return Ok(jsonFile);
-            }
-            catch (Exception exp)
-            {
-
-                return BadRequest(exp);
-            }
-
-        }
     }
 }
