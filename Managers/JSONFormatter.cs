@@ -7,6 +7,7 @@ namespace ProxyServerDotNet.Managers
         public void GenerateFirebaseConfigJsonFile()
         {
             string filePath = @".\firebase-config.json";
+            Console.WriteLine("JSON CREATION STARTED");
 
             //setting up JSON File
             var fireBaseConfig = new FireBaseConfig
@@ -25,6 +26,8 @@ namespace ProxyServerDotNet.Managers
 
             var fireBaseConfigJson = JsonConvert.SerializeObject(fireBaseConfig, Formatting.Indented);
             File.WriteAllText(filePath, fireBaseConfigJson);
+
+            Console.WriteLine("JSON CREATION COMPLETED");
         }
     }
 
