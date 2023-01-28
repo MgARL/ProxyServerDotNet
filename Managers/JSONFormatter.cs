@@ -29,6 +29,12 @@ namespace ProxyServerDotNet.Managers
 
             Console.WriteLine("JSON CREATION COMPLETED");
         }
+
+        public string ReadJsonFile(string path)
+        {
+            var jsonFile = File.ReadAllText(path);
+            return jsonFile;
+        }
     }
 
 
