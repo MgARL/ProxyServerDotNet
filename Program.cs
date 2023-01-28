@@ -13,7 +13,7 @@ builder.Services.AddControllers();
 DotNetEnv.Env.Load();
 //Create Json File
 var jsonFormatter = new JSONFormatter();
-jsonFormatter.GenerateJsonFile();
+jsonFormatter.GenerateFirebaseConfigJsonFile();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
