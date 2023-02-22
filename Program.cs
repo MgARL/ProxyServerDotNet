@@ -21,7 +21,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(opts => opts.AddDefaultPolicy(
-    bldr => bldr.WithOrigins(Environment.GetEnvironmentVariable("CLIENT_API"))
+    bldr => bldr.WithOrigins(Environment.GetEnvironmentVariable("CLIENT_URL"), 
+    Environment.GetEnvironmentVariable("DEV_URL"))
 ));
 
 builder.Services.AddSingleton(FirebaseApp.Create());
