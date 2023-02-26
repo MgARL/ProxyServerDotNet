@@ -19,7 +19,7 @@ namespace ProxyServerDotNet.Controllers
         /// </summary>
         /// <param name="input"></param>
         [HttpPost]
-        [Route("auth")]
+        [Route("auth/login")]
         public async Task<IActionResult> LogIn([FromBody] AuthInput input)
         {
             try
@@ -43,14 +43,41 @@ namespace ProxyServerDotNet.Controllers
         }
 
         /// <summary>
+        /// Authorize valid user
+        /// </summary>
+        /// <param name="input"></param>
+        [HttpGet]
+        [Route("auth")]
+        [Authorize]
+        public IActionResult Authorize()
+        {
+            try
+            {
+                var userEmail = this.User.Identities.ToList()[0].Claims.ToList()[1].Value;
+                if (userEmail != null)
+                {
+                    var rtn = new AuthInput { Email = userEmail };
+                    return Ok(rtn);
+                }
+                return Unauthorized();
+            }
+            catch (Exception err)
+            {
+
+                return BadRequest(err.Message);
+            }
+        }
+
+        /// <summary>
         /// reset password
         /// </summary>
         /// <returns></returns>
         [HttpPost]
         [Route("auth/reset")]
+        [Authorize]
         public IActionResult ResetPassword()
         {
-            return Ok();
+           return Ok();
         }
 
         /// <summary>
@@ -59,13 +86,14 @@ namespace ProxyServerDotNet.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("all")]
+        [Authorize]
         public async Task<IActionResult> GetDishesAsync()
         {
             try
             {
                 var client = FireBaseManager.initialConfig();
+                
                 FirebaseResponse response = await client.GetAsync("dishesList");
-
                 List<Dish> myRes = response.ResultAs<List<Dish>>();
 
                 return Ok(myRes);
