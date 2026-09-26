@@ -23,12 +23,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(opts => opts.AddDefaultPolicy(
     bldr =>
     {
-        bldr.WithOrigins(Environment.GetEnvironmentVariable("CLIENT_URL"),
-        Environment.GetEnvironmentVariable("DEV_URL"));
+        bldr.WithOrigins(Environment.GetEnvironmentVariable("CLIENT_URL") ?? string.Empty,
+                         Environment.GetEnvironmentVariable("DEV_URL") ?? string.Empty,
+                         Environment.GetEnvironmentVariable("PORTFOLIO_URL") ?? string.Empty);
         bldr.AllowAnyHeader();
         bldr.AllowAnyMethod();
     }
 ));
+
+builder.Services.AddHttpClient();
 
 builder.Services.AddSingleton(FirebaseApp.Create());
 
